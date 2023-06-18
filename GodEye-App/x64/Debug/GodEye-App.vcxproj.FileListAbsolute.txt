@@ -1,0 +1,4 @@
+C:\Users\ANTHONY\OneDrive - Universidad Peruana de Ciencias\A - Ciclo 5\Diseño y Patrones de Software (V)\TF\GodEye-App\GodEye-App\x64\Debug\GodEye-App.vcxproj.AssemblyReference.cache
+C:\Users\ANTHONY\OneDrive - Universidad Peruana de Ciencias\A - Ciclo 5\Diseño y Patrones de Software (V)\TF\GodEye-App\GodEye-App\x64\Debug\GodEye-App.vcxproj.SuggestedBindingRedirects.cache
+C:\Users\ANTHONY\OneDrive - Universidad Peruana de Ciencias\A - Ciclo 5\Diseño y Patrones de Software (V)\TF\GodEye-App\GodEye-App\x64\Debug\GodEyeApp.MainPage.resources
+C:\Users\ANTHONY\OneDrive - Universidad Peruana de Ciencias\A - Ciclo 5\Diseño y Patrones de Software (V)\TF\GodEye-App\GodEye-App\x64\Debug\GodEye-App.vcxproj.GenerateResource.cache
