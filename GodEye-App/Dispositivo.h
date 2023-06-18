@@ -12,12 +12,11 @@ private:
 	string ubicacion;
 	vector<Atributo> listAtributos;
 public:
-	Dispositivo(string n, int e, string t, string u) :name(n), tipo(t), ubicacion(u) {
-		listAtributos = vector<Atributo>();
+	Dispositivo(string n = " ", int e = 0, string t=" ", string u=" ") :name(n), tipo(t), ubicacion(u) {
 		if (e == 1) { this->encendido == true; }
 		else { this->encendido == false; }
+		listAtributos = vector<Atributo>();
 	}
-	Dispositivo() {}
 	~Dispositivo() {}
 
 	string getName() { return this->name; }

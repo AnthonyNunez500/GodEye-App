@@ -1,0 +1,2 @@
+Cs12345 1 Camara SalaEstar
+Ss29156 0 Sensor Patio

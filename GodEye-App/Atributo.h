@@ -10,11 +10,10 @@ private:
 	string hora;
 	string fecha;
 public:
-	Atributo(int m, string h, string f) :hora(h), fecha(f) {
+	Atributo(int m=0, string h=" ", string f=" ") :hora(h), fecha(f) {
 		if (m == 1) { this->movimiento = true; }
 		else { this->movimiento = false; }
 	}
-	Atributo() {}
 	~Atributo() {}
 	bool getMovimiento() { return this->movimiento; }
 	string getHora() { return this->hora; }

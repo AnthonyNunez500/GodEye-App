@@ -22,11 +22,11 @@ public:
 			arch << "0 15:00 10/10/23 0" << endl;
 			arch << "0 13:00 10/08/23 1" << endl;
 			arch << "1 14:00 10/08/23 1" << endl;
-			arch << "1 15:00 10/08/23 1" << endl;
+			arch << "1 15:00 10/08/23 1";
 		}
 		arch.close();
 		//De todas formas, lee el archivo
-		int movimiento; char hora[5]; char fecha[5]; int dispositivoID;
+		int movimiento; char hora[5]; char fecha[8]; int dispositivoID;
 		archFile = fopen("Atributos.txt", "r");
 		while (fscanf(archFile, "%d%s%s%d", &movimiento, hora, fecha, &dispositivoID) != EOF) {
 			listAuxD.at(dispositivoID).addAtributo(movimiento, hora, fecha);
@@ -35,28 +35,30 @@ public:
 	}
 	void LeerDispositivo() {
 		//Crea el archivo si no existe
-		arch.open("Dispositivo.txt", ios::in);
+		arch.open("Dispositivos.txt", ios::in);
 		if (arch.fail()) {
-			arch.open("Dispositivo.txt", ios::out);
-			arch << "cs-12345 1 camara salaEstar" << endl;
-			arch << "ss-29156 0 sensor patio" << endl;
+			arch.open("Dispositivos.txt", ios::out);
+			arch << "Cs12345 1 Camara SalaEstar" << endl;
+			arch << "Ss29156 0 Sensor Patio";
 		}
 		arch.close();
 		//De todas formas, lee el archivo
-		char name[20];
-		bool encendido;
+		char name[7];
+		int encendido;
 		char tipo[20];
-		char ubicacion[10];
-		archFile = fopen("Atributos.txt", "r");
-		while (fscanf(archFile, "%s,%d,%s,%s", name, &encendido, tipo, ubicacion) != EOF) {
+		char ubicacion[20];
+		archFile = fopen("Dispositivos.txt", "r");
+		while (fscanf(archFile, "%s%d%s%s", name, &encendido, tipo, ubicacion) != EOF) {
 			auxD = Dispositivo(name, encendido, tipo, ubicacion);
 			listAuxD.push_back(auxD);
 		}
 		fclose(archFile);
 		LeerAtributo();
 	}
-	vector<Dispositivo> GetDispositivos() {
-		LeerDispositivo();
-		return this->listAuxD;
+	Dispositivo GetDispositivo(int id) {
+		return this->listAuxD.at(id);
+	}
+	int getDispositivosSize() {
+		return this->listAuxD.size();
 	}
 };
