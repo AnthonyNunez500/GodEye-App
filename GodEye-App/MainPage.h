@@ -54,15 +54,50 @@ namespace GodEyeApp {
 		BufferedGraphics^ bf;
 
 		void LeerDatos() {
-			Archivo arch;
-			//vector<Dispositivo> auxVec = vector<Dispositivo>();
-			arch.LeerDispositivo();
-			//auxVec = arch.GetDispositivos();
-			int n = arch.getDispositivosSize();
-			for (int i = 0; i < n; i++) {
-				Dispositivo aux = arch.GetDispositivo(i);
-				vecDispositivos->push_back(aux);
+			fstream arch;
+			Dispositivo auxD;
+			FILE* archFile;
+
+			//Dispositivos
+			//Crea el archivo si no existe
+			arch.open("Dispositivos.txt", ios::in);
+			if (arch.fail()) {
+				arch.open("Dispositivos.txt", ios::out);
+				arch << "Cs12345 1 Camara SalaEstar" << endl;
+				arch << "Ss29156 0 Sensor Patio";
 			}
+			arch.close();
+			//De todas formas, lee el archivo
+			char name[7];
+			int encendido;
+			char tipo[20];
+			char ubicacion[20];
+			archFile = fopen("Dispositivos.txt", "r");
+			while (fscanf(archFile, "%s%d%s%s", name, &encendido, tipo, ubicacion) != EOF) {
+				auxD = Dispositivo(name, encendido, tipo, ubicacion);
+				vecDispositivos->push_back(auxD);
+			}
+			fclose(archFile);
+			//Atributos
+			//Crea el archivo si no existe
+			arch.open("Atributos.txt", ios::in);
+			if (arch.fail()) {
+				arch.open("Atributos.txt", ios::out);
+				arch << "0 13:00 10/10/23 0" << endl;
+				arch << "0 14:00 10/10/23 0" << endl;
+				arch << "0 15:00 10/10/23 0" << endl;
+				arch << "0 13:00 10/08/23 1" << endl;
+				arch << "1 14:00 10/08/23 1" << endl;
+				arch << "1 15:00 10/08/23 1";
+			}
+			arch.close();
+			//De todas formas, lee el archivo
+			int movimiento; char hora[5]; char fecha[8]; int dispositivoID;
+			archFile = fopen("Atributos.txt", "r");
+			while (fscanf(archFile, "%d%s%s%d", &movimiento, hora, fecha, &dispositivoID) != EOF) {
+				vecDispositivos->at(dispositivoID).addAtributo(movimiento, hora, fecha);
+			}
+			fclose(archFile);
 		}
 
 #pragma region Windows Form Designer generated code
@@ -91,6 +126,25 @@ namespace GodEyeApp {
 #pragma endregion
 	private: System::Void MainPage_Load(System::Object^ sender, System::EventArgs^ e) {
 		this->LeerDatos();
+		Drawing::Font^ fuente = gcnew Drawing::Font("Times new roman", 12);
+		Drawing::Font^ fuente2 = gcnew Drawing::Font("Times new roman", 14);
+		for (int i = 0; i < vecDispositivos->size(); i++) {
+			Dispositivo aux = vecDispositivos->at(i);
+			String^ name = gcnew String(aux.getName().data());
+			String^ tipo = gcnew String(aux.getTipo().data());
+			String^ ubicacion = gcnew String(aux.getUbicacion().data());
+			String^ encendido = " ";
+			if (aux.getEncendido()) {
+				encendido = "Encendido";
+			}
+			else { encendido = "Apagado"; }
+			//drawing
+			bf->Graphics->DrawString(name, fuente2, Brushes::White, 16, i * 64);
+			bf->Graphics->DrawString("Tipo:" + tipo, fuente, Brushes::White, 16, 16 + i * 64);
+			bf->Graphics->DrawString("Estado: "+ encendido, fuente, Brushes::White, 16, 16 + i * 64);
+			bf->Graphics->DrawString("Ubicación: " + ubicacion, fuente, Brushes::White, 16, 16 + i * 64);
+			bf->Render(g);
+		}
 	}
 	};
 }

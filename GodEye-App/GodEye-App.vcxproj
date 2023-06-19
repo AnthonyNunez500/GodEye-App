@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainPage.cpp" />
+    <ClCompile Include="MyForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Archivo.h" />
@@ -127,6 +128,9 @@
     <ClInclude Include="Dispositivo.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="MainPage.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
   </ItemGroup>

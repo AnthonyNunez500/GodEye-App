@@ -7,12 +7,13 @@ class Archivo
 private:
 	fstream arch;
 	Dispositivo auxD;
-	vector<Dispositivo> listAuxD;
 	FILE* archFile;
 public:
-	Archivo() {}
+	Archivo() {
+		this->auxD = Dispositivo();
+	}
 	~Archivo() {}
-	void LeerAtributo() {
+	void LeerAtributo(vector<Dispositivo>* listAuxD) {
 		//Crea el archivo si no existe
 		arch.open("Atributos.txt", ios::in);
 		if (arch.fail()) {
@@ -29,11 +30,11 @@ public:
 		int movimiento; char hora[5]; char fecha[8]; int dispositivoID;
 		archFile = fopen("Atributos.txt", "r");
 		while (fscanf(archFile, "%d%s%s%d", &movimiento, hora, fecha, &dispositivoID) != EOF) {
-			listAuxD.at(dispositivoID).addAtributo(movimiento, hora, fecha);
+			listAuxD->at(dispositivoID).addAtributo(movimiento, hora, fecha);
 		}
 		fclose(archFile);
 	}
-	void LeerDispositivo() {
+	void LeerDispositivo(vector<Dispositivo>* listAuxD) {
 		//Crea el archivo si no existe
 		arch.open("Dispositivos.txt", ios::in);
 		if (arch.fail()) {
@@ -50,15 +51,9 @@ public:
 		archFile = fopen("Dispositivos.txt", "r");
 		while (fscanf(archFile, "%s%d%s%s", name, &encendido, tipo, ubicacion) != EOF) {
 			auxD = Dispositivo(name, encendido, tipo, ubicacion);
-			listAuxD.push_back(auxD);
+			listAuxD->push_back(auxD);
 		}
 		fclose(archFile);
-		LeerAtributo();
-	}
-	Dispositivo GetDispositivo(int id) {
-		return this->listAuxD.at(id);
-	}
-	int getDispositivosSize() {
-		return this->listAuxD.size();
+		LeerAtributo(listAuxD);
 	}
 };
