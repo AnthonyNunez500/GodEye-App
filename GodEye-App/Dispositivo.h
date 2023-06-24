@@ -13,8 +13,8 @@ private:
 	vector<Atributo> listAtributos;
 public:
 	Dispositivo(string n = " ", int e = 0, string t=" ", string u=" ") :name(n), tipo(t), ubicacion(u) {
-		if (e == 1) { this->encendido == true; }
-		else { this->encendido == false; }
+		if (e == 1) { this->encendido = true; }
+		else { this->encendido = false; }
 		listAtributos = vector<Atributo>();
 	}
 	~Dispositivo() {}
@@ -26,10 +26,11 @@ public:
 
 
 	void setName(string n) { this->name = n; }
-	void serEncendido(int e) {
+	void setEncendido(int e) {
 		if (e == 1) { this->encendido == true; }
 		else { this->encendido == false; }
 	}
+	void setEncendido(bool e) { this->encendido = e; }
 	void setTipo(string t) { this->tipo = t; }
 	void setUbicacion(string u) { this->ubicacion = u; }
 
@@ -53,5 +54,8 @@ public:
 	}
 	void editAtributo(Atributo a, int id) {
 		this->listAtributos.at(id) = a;
+	}
+	int getSizeAtributos() {
+		return this->listAtributos.size();
 	}
 };

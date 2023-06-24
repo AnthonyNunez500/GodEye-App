@@ -27,6 +27,8 @@ namespace GodEyeApp {
 			//
 			//TODO: Add the constructor code here
 			//
+			vecDispositivos = new vector<Dispositivo>;
+			id = new double;
 		}
 
 	protected:
@@ -66,7 +68,30 @@ namespace GodEyeApp {
 		/// Required designer variable.
 		/// </summary>
 		System::ComponentModel::Container^ components;
+		vector<Dispositivo>* vecDispositivos;
+		double* id;
 
+		void modifyEncendido() {
+			bool auxEncendido = false;
+			Dispositivo aux = vecDispositivos->at(*id);
+			if (aux.getEncendido()) {
+				button1->BackColor = Color::Black;
+				button2->BackColor = Color::LightGreen;
+				auxEncendido = true;
+			}
+			else {
+				button1->BackColor = Color::Salmon;
+				button2->BackColor = Color::Black;
+				auxEncendido = false;
+			}
+			vecDispositivos->at(*id).setEncendido(auxEncendido);
+		}
+
+	public:
+		void getDispositivo(double i, vector<Dispositivo>* v) {
+			vecDispositivos = v;
+			*id = i;
+		}
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -101,7 +126,7 @@ namespace GodEyeApp {
 			this->SS29156->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->SS29156->Location = System::Drawing::Point(19, 21);
 			this->SS29156->Name = L"SS29156";
-			this->SS29156->Size = System::Drawing::Size(73, 19);
+			this->SS29156->Size = System::Drawing::Size(89, 22);
 			this->SS29156->TabIndex = 0;
 			this->SS29156->Text = L"SS-29156";
 			// 
@@ -113,7 +138,7 @@ namespace GodEyeApp {
 			this->label1->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->label1->Location = System::Drawing::Point(19, 136);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(45, 19);
+			this->label1->Size = System::Drawing::Size(56, 22);
 			this->label1->TabIndex = 1;
 			this->label1->Text = L"Datos";
 			// 
@@ -125,7 +150,7 @@ namespace GodEyeApp {
 			this->label2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->label2->Location = System::Drawing::Point(153, 136);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(46, 19);
+			this->label2->Size = System::Drawing::Size(57, 22);
 			this->label2->TabIndex = 2;
 			this->label2->Text = L"Fecha";
 			// 
@@ -137,7 +162,7 @@ namespace GodEyeApp {
 			this->label3->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->label3->Location = System::Drawing::Point(19, 62);
 			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(100, 19);
+			this->label3->Size = System::Drawing::Size(132, 22);
 			this->label3->TabIndex = 3;
 			this->label3->Text = L"Fecha de inicio";
 			// 
@@ -149,7 +174,7 @@ namespace GodEyeApp {
 			this->label4->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->label4->Location = System::Drawing::Point(153, 62);
 			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(74, 19);
+			this->label4->Size = System::Drawing::Size(98, 22);
 			this->label4->TabIndex = 4;
 			this->label4->Text = L"Fecha final";
 			// 
@@ -277,13 +302,15 @@ namespace GodEyeApp {
 			this->button3->TabIndex = 15;
 			this->button3->Text = L"</";
 			this->button3->UseVisualStyleBackColor = false;
+			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(2)),
-				static_cast<System::Int32>(static_cast<System::Byte>(91)));
+			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(25)),
+				static_cast<System::Int32>(static_cast<System::Byte>(23)),
+				static_cast<System::Int32>(static_cast<System::Byte>(60)));
 			this->ClientSize = System::Drawing::Size(284, 472);
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->textBox8);
@@ -310,49 +337,63 @@ namespace GodEyeApp {
 		}
 #pragma endregion
 
+	int encender = 1;
+
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
+		//Cambiaré el nombre del título de la pantalla
+		Dispositivo aux = vecDispositivos->at(*id);
+		string auxName = aux.getName();
+		String^ name = gcnew String(auxName.data());
+		this->SS29156->Text = name;
 
-		//De momento ninguno lee los archivos;
-		//textBox7->Text = "vacio" ;
-
-		for (int i = 0; i < 10; ++i) {
+		//Lee cada uno de los atributos del dispositivo
+		for (int i = 0; i < aux.getSizeAtributos(); ++i) {
+			string auxHora = aux.getAtributo(i).getHora();
+			string auxFecha = aux.getAtributo(i).getFecha();
+			String^ hora = gcnew String(auxHora.data());
+			String^ fecha = gcnew String(auxFecha.data());
+			bool movimiento = aux.getAtributo(i).getMovimiento();
+			if (movimiento) { textBox7->Text += "Movimiento detectado" + Environment::NewLine; }
+			else { textBox7->Text += "Sin movimiento" + Environment::NewLine; }
+			textBox8->Text += hora + " " + fecha + Environment::NewLine;
+		}
+		/*
+		 for (int i = 0; i < 10; ++i) {
 			textBox7->Text += "Sin movimiento" + Environment::NewLine;
 		}
 
 		for (int i = 0; i < 10; ++i) {
 			textBox8->Text += "00/00/00" + Environment::NewLine;
 		}
+		*/
+		//Seteamos el valor del botón
+		/*if (aux.getEncendido() == true) { encender = -1; }
+		else { encender = 1; }*/
 
+		modifyEncendido();
 	}
-
-		   int encender = 1;
 
 		   //boton off
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		encender = encender * -1;
-		if (encender == -1) {
-			button1->BackColor = Color::Black;
-			button2->BackColor = Color::LightGreen;
-		}
-		else {
-			button1->BackColor = Color::Salmon;
-			button2->BackColor = Color::Black;
-		}
+		Dispositivo aux = vecDispositivos->at(*id);
+		bool auxEncendido = !aux.getEncendido();
+		//encender = encender * -1;
+		vecDispositivos->at(*id).setEncendido(auxEncendido);
+		modifyEncendido();
 	}
 
 		   //boton on
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
-		encender = encender * -1;
-		if (encender == 1) {
-			button2->BackColor = Color::Black;
-			button1->BackColor = Color::Salmon;
-		}
-		else {
-			button2->BackColor = Color::LightGreen;
-			button1->BackColor = Color::Black;
-		}
+		Dispositivo aux = vecDispositivos->at(*id);
+		bool auxEncendido = !aux.getEncendido();
+		//encender = encender * -1;
+		vecDispositivos->at(*id).setEncendido(auxEncendido);
+		modifyEncendido();
 	}
 
-
-	};
+		   //boton salir
+	private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->Close();
+	}
+};
 }

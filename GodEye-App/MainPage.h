@@ -69,6 +69,7 @@ namespace GodEyeApp {
 		}
 		void ButtonPress(double i) {
 			MyForm^ myform = gcnew MyForm;
+			myform->getDispositivo(i,vecDispositivos);
 			myform->Show();
 		}
 
@@ -90,14 +91,16 @@ namespace GodEyeApp {
 			// 
 			// MainPage
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(25)), static_cast<System::Int32>(static_cast<System::Byte>(23)),
 				static_cast<System::Int32>(static_cast<System::Byte>(60)));
-			this->ClientSize = System::Drawing::Size(342, 593);
+			this->ClientSize = System::Drawing::Size(256, 482);
 			this->ForeColor = System::Drawing::Color::White;
+			this->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->Name = L"MainPage";
 			this->Text = L"MainPage";
+			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &MainPage::MainPage_FormClosed);
 			this->Load += gcnew System::EventHandler(this, &MainPage::MainPage_Load);
 			this->ResumeLayout(false);
 
@@ -111,7 +114,7 @@ namespace GodEyeApp {
 			Button^ aux=gcnew Button();
 			aux->Location = Point(24, 64 + i * 96);
 			aux->Height = 28;
-			aux->Width = 96;
+			aux->Width = 80;
 			aux->BackColor = Color::White;
 			aux->Font = gcnew Drawing::Font("Times new roman", 12);
 			aux->ForeColor = Color::FromArgb(
@@ -159,5 +162,10 @@ namespace GodEyeApp {
 		}
 		bf->Render(g);
 	}
+private: System::Void MainPage_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+	Archivo ar;
+	ar.EscribirDispositivos(vecDispositivos);
+	ar.EscribirAtributos(vecDispositivos);
+}
 };
 }

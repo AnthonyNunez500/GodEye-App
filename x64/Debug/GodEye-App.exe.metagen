@@ -1,4 +1,5 @@
   GodEyeApp.MainPage.resources - Embedded, ContainedInManifestFile, 
+  GodEyeApp.MyForm.resources - Embedded, ContainedInManifestFile, 
 ImageRuntimeVersion: v4.0.30319
 Assembly GodEye-App, Version=0.0.*, Culture=Todos los idiomas (todos los países): 
 	hash=SHA1, flags=PublicKey
@@ -17,6 +18,11 @@ Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c5619
 Class GodEyeApp.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Int32 encender : Public
+  Methods:
+    getDispositivo(Double, vector<Dispositivo\,std::allocator<Dispositivo> >*): PrivateScope, Public, HideBySig
+    InitializeComponent(): PrivateScope, Public, HideBySig
 Class GodEyeApp.MainPage: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName

@@ -1,2 +1,2 @@
-Cs12345 1 Camara SalaEstar
-Ss29156 0 Sensor Patio
+Cs12345 0 Camara Camara
+Ss29156 1 Sensor Sensor

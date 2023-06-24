@@ -58,4 +58,29 @@ public:
 		fclose(archFile);
 		//LeerAtributo(listAuxD);
 	}
+	void EscribirDispositivos(vector<Dispositivo>* listAuxD) {
+		arch.open("Dispositivos.txt", ios::out);
+		for (int i = 0; i < listAuxD->size(); i++)	{
+			auxD = listAuxD->at(i);
+			string encendido;
+			if (auxD.getEncendido()) { encendido = "1"; }
+			else { encendido = "0"; }
+			arch << auxD.getName() + " " +
+				encendido + " " + auxD.getTipo() + " " + auxD.getTipo() << endl;
+		}
+		arch.close();
+	}
+	void EscribirAtributos(vector<Dispositivo>* listAuxD) {
+		for (int i = 0; i < listAuxD->size(); i++) {
+			for (int j = 0; j < listAuxD->at(i).getSizeAtributos(); j++) {
+				auxA = listAuxD->at(i).getAtributo(j);
+				string movimiento;
+				string dispositivoId;
+				if (auxA.getMovimiento()) { movimiento = "1"; }
+				else { movimiento = "0"; }
+				dispositivoId = to_string(i);
+				arch << movimiento + " " + auxA.getHora() + " " + auxA.getFecha() + " " + dispositivoId << endl;
+			}
+		}
+	}
 };
