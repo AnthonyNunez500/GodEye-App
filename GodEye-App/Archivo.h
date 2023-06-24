@@ -7,6 +7,7 @@ class Archivo
 private:
 	fstream arch;
 	Dispositivo auxD;
+	Atributo auxA;
 	FILE* archFile;
 public:
 	Archivo() {
@@ -30,7 +31,8 @@ public:
 		int movimiento; char hora[5]; char fecha[8]; int dispositivoID;
 		archFile = fopen("Atributos.txt", "r");
 		while (fscanf(archFile, "%d%s%s%d", &movimiento, hora, fecha, &dispositivoID) != EOF) {
-			listAuxD->at(dispositivoID).addAtributo(movimiento, hora, fecha);
+			auxA = Atributo(movimiento, hora, fecha);
+			listAuxD->at(dispositivoID).addAtributo(auxA);
 		}
 		fclose(archFile);
 	}
@@ -54,6 +56,6 @@ public:
 			listAuxD->push_back(auxD);
 		}
 		fclose(archFile);
-		LeerAtributo(listAuxD);
+		//LeerAtributo(listAuxD);
 	}
 };

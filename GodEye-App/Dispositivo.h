@@ -38,6 +38,9 @@ public:
 		Atributo a = Atributo(m, h, f);
 		this->listAtributos.push_back(a);
 	}
+	void addAtributo(Atributo a) {
+		this->listAtributos.push_back(a);
+	}
 	Atributo getAtributo(int id) {
 		return this->listAtributos.at(id);
 	}
@@ -46,6 +49,9 @@ public:
 	}
 	void editAtributo(int m, string h, string f, int id) {
 		Atributo a = Atributo(m, h, f);
+		this->listAtributos.at(id) = a;
+	}
+	void editAtributo(Atributo a, int id) {
 		this->listAtributos.at(id) = a;
 	}
 };

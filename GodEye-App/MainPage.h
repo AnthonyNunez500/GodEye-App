@@ -1,5 +1,9 @@
 #pragma once
 #include "Archivo.h"
+#include "MyForm.h"
+
+using namespace System;
+using namespace std;
 
 namespace GodEyeApp {
 
@@ -49,55 +53,23 @@ namespace GodEyeApp {
 		/// </summary>
 
 		vector<Dispositivo>* vecDispositivos;
+		//vector<Button>* vecButtons;
 		Graphics^ g;
 		BufferedGraphicsContext^ bfc;
-		BufferedGraphics^ bf;
+	private: System::Windows::Forms::Timer^ timer1;
+		   BufferedGraphics^ bf;
 
 		void LeerDatos() {
 			fstream arch;
 			Dispositivo auxD;
 			FILE* archFile;
-
-			//Dispositivos
-			//Crea el archivo si no existe
-			arch.open("Dispositivos.txt", ios::in);
-			if (arch.fail()) {
-				arch.open("Dispositivos.txt", ios::out);
-				arch << "Cs12345 1 Camara SalaEstar" << endl;
-				arch << "Ss29156 0 Sensor Patio";
-			}
-			arch.close();
-			//De todas formas, lee el archivo
-			char name[7];
-			int encendido;
-			char tipo[20];
-			char ubicacion[20];
-			archFile = fopen("Dispositivos.txt", "r");
-			while (fscanf(archFile, "%s%d%s%s", name, &encendido, tipo, ubicacion) != EOF) {
-				auxD = Dispositivo(name, encendido, tipo, ubicacion);
-				vecDispositivos->push_back(auxD);
-			}
-			fclose(archFile);
-			//Atributos
-			//Crea el archivo si no existe
-			arch.open("Atributos.txt", ios::in);
-			if (arch.fail()) {
-				arch.open("Atributos.txt", ios::out);
-				arch << "0 13:00 10/10/23 0" << endl;
-				arch << "0 14:00 10/10/23 0" << endl;
-				arch << "0 15:00 10/10/23 0" << endl;
-				arch << "0 13:00 10/08/23 1" << endl;
-				arch << "1 14:00 10/08/23 1" << endl;
-				arch << "1 15:00 10/08/23 1";
-			}
-			arch.close();
-			//De todas formas, lee el archivo
-			int movimiento; char hora[5]; char fecha[8]; int dispositivoID;
-			archFile = fopen("Atributos.txt", "r");
-			while (fscanf(archFile, "%d%s%s%d", &movimiento, hora, fecha, &dispositivoID) != EOF) {
-				vecDispositivos->at(dispositivoID).addAtributo(movimiento, hora, fecha);
-			}
-			fclose(archFile);
+			Archivo ar;
+			ar.LeerDispositivo(vecDispositivos);
+			ar.LeerAtributo(vecDispositivos);
+		}
+		void ButtonPress(double i) {
+			MyForm^ myform = gcnew MyForm;
+			myform->Show();
 		}
 
 #pragma region Windows Form Designer generated code
@@ -107,7 +79,14 @@ namespace GodEyeApp {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
+			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->SuspendLayout();
+			// 
+			// timer1
+			// 
+			this->timer1->Enabled = true;
+			this->timer1->Tick += gcnew System::EventHandler(this, &MainPage::timer1_Tick);
 			// 
 			// MainPage
 			// 
@@ -125,26 +104,60 @@ namespace GodEyeApp {
 		}
 #pragma endregion
 	private: System::Void MainPage_Load(System::Object^ sender, System::EventArgs^ e) {
+		//Leer los datos del programa
 		this->LeerDatos();
+		for (int i = 0; i < vecDispositivos->size(); i++) {
+			string auxName = vecDispositivos->at(i).getName();
+			Button^ aux=gcnew Button();
+			aux->Location = Point(24, 64 + i * 96);
+			aux->Height = 28;
+			aux->Width = 96;
+			aux->BackColor = Color::White;
+			aux->Font = gcnew Drawing::Font("Times new roman", 12);
+			aux->ForeColor = Color::FromArgb(
+				static_cast<System::Int32>(static_cast<System::Byte>(25)),
+				static_cast<System::Int32>(static_cast<System::Byte>(23)),
+				static_cast<System::Int32>(static_cast<System::Byte>(60)));
+			aux->Text = "Acceder";
+			aux->Name = "access_" + gcnew String(auxName.data());
+			aux->AccessibleName = i.ToString();
+			this->Controls->Add(aux);
+			aux->Click += gcnew EventHandler(this, &MainPage::Button_Click);
+		}
+	}
+	private: System::Void Button_Click(System::Object^ sender, System::EventArgs^ e) {
+		Button^ aux = (Button^)sender;
+		String^ strName = aux->AccessibleName;
+		double id = Convert::ToDouble(strName);
+		this->ButtonPress(id);
+	}
+	private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) {
 		Drawing::Font^ fuente = gcnew Drawing::Font("Times new roman", 12);
 		Drawing::Font^ fuente2 = gcnew Drawing::Font("Times new roman", 14);
+		//Limpiar la pantalla
+		bf->Graphics->Clear(this->BackColor);
+
 		for (int i = 0; i < vecDispositivos->size(); i++) {
-			Dispositivo aux = vecDispositivos->at(i);
-			String^ name = gcnew String(aux.getName().data());
-			String^ tipo = gcnew String(aux.getTipo().data());
-			String^ ubicacion = gcnew String(aux.getUbicacion().data());
+			//auxiliares
+			string auxName = vecDispositivos->at(i).getName();
+			string auxTipo = vecDispositivos->at(i).getTipo();
+			string auxUbicacion = vecDispositivos->at(i).getUbicacion();
+			bool auxEncendido = vecDispositivos->at(i).getEncendido();
+			String^ name = gcnew String(auxName.data());
+			String^ tipo = gcnew String(auxTipo.data());
+			String^ ubicacion = gcnew String(auxUbicacion.data());
 			String^ encendido = " ";
-			if (aux.getEncendido()) {
+			if (auxEncendido) {
 				encendido = "Encendido";
 			}
 			else { encendido = "Apagado"; }
 			//drawing
-			bf->Graphics->DrawString(name, fuente2, Brushes::White, 16, i * 64);
-			bf->Graphics->DrawString("Tipo:" + tipo, fuente, Brushes::White, 16, 16 + i * 64);
-			bf->Graphics->DrawString("Estado: "+ encendido, fuente, Brushes::White, 16, 16 + i * 64);
-			bf->Graphics->DrawString("Ubicación: " + ubicacion, fuente, Brushes::White, 16, 16 + i * 64);
-			bf->Render(g);
+			bf->Graphics->DrawString(name, fuente2, Brushes::White, 24, i * 96);
+			bf->Graphics->DrawString(tipo, fuente, Brushes::White, 24, 16 + i * 96);
+			bf->Graphics->DrawString(encendido, fuente, Brushes::White, 24, 32 + i * 96);
+			bf->Graphics->DrawString(ubicacion, fuente, Brushes::White, 24, 48 + i * 96);
 		}
+		bf->Render(g);
 	}
-	};
+};
 }

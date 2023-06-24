@@ -1,7 +1,11 @@
 #pragma once
 #include "Archivo.h"
 
-namespace DisPa {
+
+using namespace System;
+using namespace std;
+
+namespace GodEyeApp {
 
 
 	using namespace System;
